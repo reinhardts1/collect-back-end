@@ -33,7 +33,7 @@ const index = async (req, res) => {
 const show = async (req, res) => {
   try {
     const collection = await Collection.findById(req.params.id)
-      .populate('woner')
+      .populate('owner')
       .populate('ratings.author')
     res.status(200).json(collection)
   } catch (error) {
