@@ -41,12 +41,39 @@ const show = async (req, res) => {
   }
 }
 
+const update = async (req, res) => {
+  try {
+    const collection = await Collection.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    ).populate('owner')
+    res.status(200).json(collection)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
+const deleteCollection = async (req, res) => {
+  try {
+    const collection = await Collection.findByIdAndDelete(req.params.id)
+    const profile = await Profile.findById(req.user.profile)
+    profile.collections.remove({ _id: req.params.id })
+    await profile.save()
+    res.status(200).json(collection)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
 
 
 export {
   create,
   index,
-  show
+  show,
+  update,
+  deleteCollection as delete
 }
 
 
